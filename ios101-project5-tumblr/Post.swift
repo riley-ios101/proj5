@@ -19,8 +19,8 @@ struct Post: Decodable {
     let summary: String
 
     /// The full blog post caption
-    let caption: String
-    let photos: [Photo]
+    let caption: String?
+    let photos: [Photo]?
 }
 
 struct Photo: Decodable {
