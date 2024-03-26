@@ -4,7 +4,7 @@ Submitted by: **Riley Dou**
 
 **Daily Dose of Dogs (and Some Cats)** is an app that is dedicated to our furry friends! Scroll through and learn about what they are up to.
 
-Time spent: **3** hours spent in total
+Time spent: **3.5** hours spent in total
 
 ## Required Features
 
