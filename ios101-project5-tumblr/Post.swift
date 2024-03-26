@@ -15,11 +15,10 @@ struct Response: Decodable {
 
 struct Post: Decodable {
 
-    /// A brief truncated version of the post caption
-    let summary: String
+    // A brief truncated version of the post caption
+    let summary: String?
 
-    /// The full blog post caption
-    let caption: String?
+    let body: String?
     let photos: [Photo]?
 }
 

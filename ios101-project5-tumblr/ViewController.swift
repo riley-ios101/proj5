@@ -16,24 +16,25 @@ class ViewController: UIViewController, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell", for: indexPath) as! PostCell
         
         let currPost = posts[indexPath.row]
-        
-        if let photo = currPost.photos?.first {
-            
-            let url = photo.originalSize.url
-              
-              // Load the photo in the image view via Nuke library...
-            Nuke.loadImage(with: url, into: cell.postImageView)
 
-        } else {
-            cell.postImageView.backgroundColor = .lightGray
+        if let body = currPost.body {
+            if let imgURL = extractImageSrc(from: body) {
+                loadImage(with: imgURL, into: cell.postImageView)
+            }
         }
         
-        cell.postSummary.text = currPost.summary
+        if let photo = currPost.photos?.first {
+            let url = photo.originalSize.url
+            loadImage(with: url, into: cell.postImageView)
+        }
         
+        if (currPost.summary == "") {
+            cell.postSummary.text = "🥰"
+        } else {
+            cell.postSummary.text = currPost.summary
+        }
         
         return cell
-        
-        
         
     }
     
@@ -61,6 +62,20 @@ class ViewController: UIViewController, UITableViewDataSource {
         
         fetchPosts()
         
+    }
+    
+    private func extractImageSrc(from htmlString: String) -> URL? {
+        let pattern = #"\<img src=\"([^"]+)\""#
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        let nsrange = NSRange(htmlString.startIndex..<htmlString.endIndex, in: htmlString)
+        let matches = regex.matches(in: htmlString, options: [], range: nsrange)
+        
+        if let match = matches.first {
+            let range = Range(match.range(at: 1), in: htmlString)!
+            return URL(string: String(htmlString[range]))
+        }
+        
+        return nil
     }
     
     @objc private func refreshData(_ sender: Any) {
@@ -101,7 +116,7 @@ class ViewController: UIViewController, UITableViewDataSource {
 
                     print("✅ We got \(posts.count) posts!")
                     for post in posts {
-                        print("🍏 Summary: \(post.summary)")
+                        print("🍏 Summary: \(post.summary)" )
                     }
                     
                     self?.posts = posts
